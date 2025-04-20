@@ -139,7 +139,7 @@ public class CargoDAO {
         Cargo cargo = new Cargo();
         cargo.setId(doc.getObjectId("_id"));
         cargo.setDescription(doc.getString("description"));
-        cargo.setWeight(doc.getDouble("weight"));
+        cargo.setWeight(doc.get("weight",Number.class).intValue());
         cargo.setType(doc.getString("type"));
         cargo.setShipId(doc.getObjectId("shipId"));
         cargo.setCustomerId(doc.getObjectId("customerId"));

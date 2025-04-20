@@ -1,16 +1,20 @@
 package org.example.contoller;
 
 import org.example.dao.EmployeeDAO;
+import org.example.dao.RouteDAO;
 import org.example.model.Employee;
 import org.bson.types.ObjectId;
+import org.example.model.Route;
 
 import java.util.List;
 
 public class EmployeeController {
     private final EmployeeDAO employeeDAO;
+    private final RouteDAO routeDAO;
 
     public EmployeeController() {
         this.employeeDAO = new EmployeeDAO();
+        this.routeDAO = new RouteDAO();
     }
 
     public List<Employee> getAllEmployees() {
@@ -53,10 +57,23 @@ public class EmployeeController {
 
     public boolean deleteEmployee(String id) {
         try {
-            employeeDAO.delete(new ObjectId(id));
+            ObjectId employeeId = new ObjectId(id);
+
+            Route assignedRoute = routeDAO.findByEmployeeId(employeeId);
+
+            if (assignedRoute != null) {
+                assignedRoute.setAssignedEmployeeId(null);
+                routeDAO.save(assignedRoute);
+            }
+
+            employeeDAO.delete(employeeId);
             return true;
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Некорректный ID сотрудника: " + id);
+            return false;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Ошибка при удалении сотрудника: " + e.getMessage());
             return false;
         }
     }

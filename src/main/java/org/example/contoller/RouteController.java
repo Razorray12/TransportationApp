@@ -47,8 +47,17 @@ public class RouteController {
 
     public boolean saveRoute(Route route) {
         try {
+            if (route.getAssignedEmployeeId() != null) {
+                Route existingRoute = routeDAO.findByEmployeeId(route.getAssignedEmployeeId());
+                if (existingRoute != null && !existingRoute.getId().equals(route.getId())) {
+                    throw new IllegalStateException("Этот сотрудник уже назначен на другой маршрут");
+                }
+            }
+
             routeDAO.save(route);
             return true;
+        } catch (IllegalStateException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -62,6 +71,14 @@ public class RouteController {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void unassignEmployee(String employeeId) {
+        try {
+            routeDAO.unassignEmployee(new ObjectId(employeeId));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
     }
 }

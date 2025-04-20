@@ -325,8 +325,11 @@ public class CargoPanel extends JPanel {
         tableModel.setRowCount(0);
 
         for (Cargo cargo : cargos) {
-            Ship ship = shipController.getShipById(cargo.getShipId().toString());
-            Customer customer = customerController.getCustomerById(cargo.getCustomerId().toString());
+            String shipIdStr = cargo.getShipId() != null ? cargo.getShipId().toString() : null;
+            Ship ship = shipIdStr != null ? shipController.getShipById(shipIdStr) : null;
+
+            String customerIdStr = cargo.getCustomerId() != null ? cargo.getCustomerId().toString() : null;
+            Customer customer = customerIdStr != null ? customerController.getCustomerById(customerIdStr) : null;
 
             tableModel.addRow(new Object[]{
                     cargo.getId().toString(),

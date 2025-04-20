@@ -114,10 +114,11 @@ public class EmployeePanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Первая колонка (метки)
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.weightx = 0.1;
         editPanel.add(new JLabel("Имя:"), gbc);
 
         gbc.gridy = 1;
@@ -129,10 +130,10 @@ public class EmployeePanel extends JPanel {
         gbc.gridy = 3;
         editPanel.add(new JLabel("Дата найма (ГГГГ-ММ-ДД):"), gbc);
 
-        // Вторая колонка (поля)
+        // Second column - fields
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0.4;
         editPanel.add(firstNameField, gbc);
 
         gbc.gridy = 1;
@@ -144,9 +145,10 @@ public class EmployeePanel extends JPanel {
         gbc.gridy = 3;
         editPanel.add(hireDateField, gbc);
 
-        // Третья колонка (метки)
+        // Third column - labels
         gbc.gridx = 2;
         gbc.gridy = 0;
+        gbc.weightx = 0.1;
         editPanel.add(new JLabel("Email:"), gbc);
 
         gbc.gridy = 1;
@@ -158,9 +160,10 @@ public class EmployeePanel extends JPanel {
         gbc.gridy = 3;
         editPanel.add(new JLabel("Статус:"), gbc);
 
-        // Четвертая колонка (поля)
+        // Fourth column - fields
         gbc.gridx = 3;
         gbc.gridy = 0;
+        gbc.weightx = 0.4;
         editPanel.add(emailField, gbc);
 
         gbc.gridy = 1;
@@ -172,14 +175,16 @@ public class EmployeePanel extends JPanel {
         gbc.gridy = 3;
         editPanel.add(statusComboBox, gbc);
 
-        // Пятая колонка (метки)
-        gbc.gridx = 4;
-        gbc.gridy = 0;
-        editPanel.add(new JLabel("Номер паспорта:"), gbc);
+        // Fifth column - passport label
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.weightx = 0.1;
+        editPanel.add(new JLabel("Паспорт:"), gbc);
 
-        // Шестая колонка (поля)
-        gbc.gridx = 5;
-        gbc.gridy = 0;
+        // Sixth column - passport field
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.weightx = 0.4;
         editPanel.add(passportField, gbc);
 
         // Кнопки действий
@@ -197,8 +202,8 @@ public class EmployeePanel extends JPanel {
         buttonPanel.add(deleteButton);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 6;
+        gbc.gridy = 5;
+        gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.CENTER;
         editPanel.add(buttonPanel, gbc);
 

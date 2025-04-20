@@ -8,6 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 
+import com.mongodb.client.model.Updates;
 import org.example.model.Route;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -98,6 +99,13 @@ public class RouteDAO {
     }
 
     public ObjectId save(Route route) {
+        if (route.getAssignedEmployeeId() != null) {
+            Route existingRoute = findByEmployeeId(route.getAssignedEmployeeId());
+            if (existingRoute != null && !existingRoute.getId().equals(route.getId())) {
+                throw new IllegalStateException("Этот сотрудник уже назначен на другой маршрут");
+            }
+        }
+
         Document doc = routeToDocument(route);
 
         if (route.getId() == null) {
@@ -120,7 +128,7 @@ public class RouteDAO {
         route.setName(doc.getString("name"));
         route.setStartPort(doc.getString("startPort"));
         route.setEndPort(doc.getString("endPort"));
-        route.setDistance(doc.getDouble("distance"));
+        route.setDistance(doc.get("distance",Number.class).intValue());
         route.setEstimatedDays(doc.getInteger("estimatedDays"));
         route.setAssignedEmployeeId(doc.getObjectId("assignedEmployeeId"));
         route.setDescription(doc.getString("description"));
@@ -146,5 +154,12 @@ public class RouteDAO {
                 .append("status", route.getStatus());
 
         return doc;
+    }
+
+    public void unassignEmployee(ObjectId employeeId) {
+        collection.updateMany(
+                Filters.eq("assignedEmployeeId", employeeId),
+                Updates.set("assignedEmployeeId", null)
+        );
     }
 }

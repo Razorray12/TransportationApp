@@ -230,7 +230,10 @@ public class RoutePanel extends JPanel {
         employeeComboBox.removeAllItems();
         List<Employee> employees = employeeController.getAllEmployees();
         for (Employee employee : employees) {
-            employeeComboBox.addItem(employee);
+            Route assignedRoute = routeController.getRouteByEmployeeId(employee.getId().toString());
+            if (assignedRoute == null || (selectedRoute != null && assignedRoute.getId().equals(selectedRoute.getId()))) {
+                employeeComboBox.addItem(employee);
+            }
         }
 
         if (selectedEmployee != null) {
@@ -361,7 +364,8 @@ public class RoutePanel extends JPanel {
             } else {
                 JOptionPane.showMessageDialog(this, "Ошибка при сохранении маршрута", "Ошибка", JOptionPane.ERROR_MESSAGE);
             }
-
+        } catch (IllegalStateException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Расстояние и оценка дней должны быть числами!", "Ошибка", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
